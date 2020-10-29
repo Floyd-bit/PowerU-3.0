@@ -1,74 +1,93 @@
 <template>
   <div class="dashboard-editor-container">
-    <div class=" clearfix">
-      <pan-thumb :image="avatar" style="float: left">
-        Your roles:
-        <span v-for="item in roles" :key="item" class="pan-info-roles">{{ item }}</span>
-      </pan-thumb>
-      <github-corner style="position: absolute; top: 0px; border: 0; right: 0;" />
-      <div class="info-container">
-        <span class="display_name">{{ name }}</span>
-        <span style="font-size:20px;padding-top:20px;display:inline-block;">Editor's Dashboard</span>
-      </div>
-    </div>
-    <div>
-      <img :src="emptyGif" class="emptyGif">
-    </div>
+    <github-corner class="github-corner" />
+    <el-row :gutter="5">
+      <el-col :span="16" :offset="2" >
+        <div class="grid-content1">
+          <div class="first">
+            <el-card>
+              传统光伏电力交易主要采用双边交易或多边交易模式，效率较低，能源流、资金流清分程序复杂，而基于区块链的电力交易，不但可以提升交易效率，还能进一步提升电力交易的智慧化水平和公信力。“PowerU”平台是一个为实现光伏电力供需关联互动和“发-储-配-用”精准调配、安全校核和自主交易的平台，为构建我国智能化电网提供解决方案，并可拓展出“PowerU+扶贫”等具有社会效益的价值型项目。
+            </el-card>
+          </div>
+          <div class="second">
+            <el-card>
+              这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述
+              这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述
+              这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述
+              这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述
+              这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述
+              这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述这是一段描述
+            </el-card>
+          </div>
+        </div>
+      </el-col>
+      <el-col :span="2" :offset="0">
+        <div class="grid-content2">
+          <todo-list></todo-list>
+        </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import PanThumb from '@/components/PanThumb'
-import GithubCorner from '@/components/GithubCorner'
+import TodoList from '../admin/components/TodoList'
+
 
 export default {
-  name: 'DashboardEditor',
-  components: { PanThumb, GithubCorner },
-  data() {
-    return {
-      emptyGif: 'https://wpimg.wallstcn.com/0e03b7da-db9e-4819-ba10-9016ddfdaed3'
-    }
+  name: 'DashboardAdmin',
+  components: {
+    TodoList,
   },
-  computed: {
-    ...mapGetters([
-      'name',
-      'avatar',
-      'roles'
-    ])
-  }
 }
 </script>
 
 <style lang="scss" scoped>
-  .emptyGif {
-    display: block;
-    width: 45%;
-    margin: 0 auto;
+.dashboard-editor-container {
+  //padding: 32px;
+  background-color: rgb(240, 242, 245);
+  position: relative;
+
+  .github-corner {
+    position: absolute;
+    top: 0;
+    border: 0;
+    right: 0;
+  }
+  .grid-content1{
+    width: 800px;
+    height: 700px;
+    //background: #1e88c7;
+    .first{
+      width:800px;
+      height:200px;
+      margin-top: 50px;
+      //background: #1f2d3d;
+    }
+    .second{
+      width:800px;
+      height:300px;
+
+      //background: #2ac06d;
+    }
+  }
+  .grid-content2{
+    //background: #1e88c7;
+    width: 300px;
+    height:700px;
+    margin-top: 50px;
   }
 
-  .dashboard-editor-container {
-    background-color: #e3e3e3;
-    min-height: 100vh;
-    padding: 50px 60px 0px;
-    .pan-info-roles {
-      font-size: 12px;
-      font-weight: 700;
-      color: #333;
-      display: block;
-    }
-    .info-container {
-      position: relative;
-      margin-left: 190px;
-      height: 150px;
-      line-height: 200px;
-      .display_name {
-        font-size: 48px;
-        line-height: 48px;
-        color: #212121;
-        position: absolute;
-        top: 25px;
-      }
-    }
+  .chart-wrapper {
+    background: #fff;
+    padding: 16px 16px 0;
+    margin-bottom: 32px;
   }
+}
+
+@media (max-width:1024px) {
+  .chart-wrapper {
+    padding: 30px;
+  }
+}
 </style>

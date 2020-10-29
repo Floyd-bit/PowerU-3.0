@@ -1,112 +1,76 @@
 <template>
-  <div class="dashboard-editor-container">
+  <div class="dashboard-admin-container">
     <github-corner class="github-corner" />
-
-    <panel-group @handleSetLineChartData="handleSetLineChartData" />
-
-    <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      <line-chart :chart-data="lineChartData" />
-    </el-row>
-
-    <el-row :gutter="32">
-      <el-col :xs="24" :sm="24" :lg="8">
-        <div class="chart-wrapper">
-          <raddar-chart />
+    <el-row :gutter="20">
+      <el-col :span="12" :offset="2" >
+        <div class="grid-content1">
+          <div class="first">
+              <box-card></box-card>
+          </div>
+          <div class="second">
+            <el-card>
+              传统光伏电力交易主要采用双边交易或多边交易模式，效率较低，能源流、资金流清分程序复杂，而基于区块链的电力交易，不但可以提升交易效率，还能进一步提升电力交易的智慧化水平和公信力。“PowerU”平台是一个为实现光伏电力供需关联互动和“发-储-配-用”精准调配、安全校核和自主交易的平台，为构建我国智能化电网提供解决方案，并可拓展出“PowerU+扶贫”等具有社会效益的价值型项目.
+            </el-card>
+          </div>
         </div>
       </el-col>
-      <el-col :xs="24" :sm="24" :lg="8">
-        <div class="chart-wrapper">
-          <pie-chart />
-        </div>
-      </el-col>
-      <el-col :xs="24" :sm="24" :lg="8">
-        <div class="chart-wrapper">
-          <bar-chart />
+      <el-col :span="6" :offset="2">
+        <div class="grid-content2">
+          <todo-list></todo-list>
         </div>
       </el-col>
     </el-row>
-
-    <el-row :gutter="8">
-      <el-col :xs="{span: 24}" :sm="{span: 24}" :md="{span: 24}" :lg="{span: 12}" :xl="{span: 12}" style="padding-right:8px;margin-bottom:30px;">
-        <transaction-table />
-      </el-col>
-      <el-col :xs="{span: 24}" :sm="{span: 12}" :md="{span: 12}" :lg="{span: 6}" :xl="{span: 6}" style="margin-bottom:30px;">
-        <todo-list />
-      </el-col>
-      <el-col :xs="{span: 24}" :sm="{span: 12}" :md="{span: 12}" :lg="{span: 6}" :xl="{span: 6}" style="margin-bottom:30px;">
-        <box-card />
-      </el-col>
-    </el-row>
-  </div>
+ </div>
 </template>
 
 <script>
-import GithubCorner from '@/components/GithubCorner'
-import PanelGroup from './components/PanelGroup'
-import LineChart from './components/LineChart'
-import RaddarChart from './components/RaddarChart'
-import PieChart from './components/PieChart'
-import BarChart from './components/BarChart'
-import TransactionTable from './components/TransactionTable'
 import TodoList from './components/TodoList'
 import BoxCard from './components/BoxCard'
-
-const lineChartData = {
-  newVisitis: {
-    expectedData: [100, 120, 161, 134, 105, 160, 165],
-    actualData: [120, 82, 91, 154, 162, 140, 145]
-  },
-  messages: {
-    expectedData: [200, 192, 120, 144, 160, 130, 140],
-    actualData: [180, 160, 151, 106, 145, 150, 130]
-  },
-  purchases: {
-    expectedData: [80, 100, 121, 104, 105, 90, 100],
-    actualData: [120, 90, 100, 138, 142, 130, 130]
-  },
-  shoppings: {
-    expectedData: [130, 140, 141, 142, 145, 150, 160],
-    actualData: [120, 82, 91, 154, 162, 140, 130]
-  }
-}
 
 export default {
   name: 'DashboardAdmin',
   components: {
-    GithubCorner,
-    PanelGroup,
-    LineChart,
-    RaddarChart,
-    PieChart,
-    BarChart,
-    TransactionTable,
+    BoxCard,
     TodoList,
-    BoxCard
   },
-  data() {
-    return {
-      lineChartData: lineChartData.newVisitis
-    }
-  },
-  methods: {
-    handleSetLineChartData(type) {
-      this.lineChartData = lineChartData[type]
-    }
-  }
 }
 </script>
 
 <style lang="scss" scoped>
-.dashboard-editor-container {
-  padding: 32px;
+.dashboard-admin-container {
+  //padding: 32px;
   background-color: rgb(240, 242, 245);
   position: relative;
 
+
   .github-corner {
     position: absolute;
-    top: 0px;
+    top: 0;
     border: 0;
     right: 0;
+  }
+  .grid-content1{
+    width: 800px;
+    height: 900px;
+    //background: #1e88c7;
+    .first{
+      width:800px;
+      height:400px;
+      margin-top: 50px;
+      //background: #1f2d3d;
+    }
+    .second{
+      width:800px;
+      height:300px;
+      margin-top: 100px;
+      //background: #2ac06d;
+    }
+  }
+  .grid-content2{
+    //background: #1e88c7;
+    width: 300px;
+    height:700px;
+    margin-top: 50px;
   }
 
   .chart-wrapper {
@@ -118,7 +82,7 @@ export default {
 
 @media (max-width:1024px) {
   .chart-wrapper {
-    padding: 8px;
+    padding: 30px;
   }
 }
 </style>

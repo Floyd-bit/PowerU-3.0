@@ -5,21 +5,21 @@
     </div>
     <div style="position:relative;">
       <pan-thumb :image="avatar" class="panThumb" />
-      <mallki class-name="mallki-text" text="vue-element-admin" />
+      <mallki class-name="mallki-text" text="电厂对接情况" />
       <div style="padding-top:35px;" class="progress-item">
-        <span>Vue</span>
+        <span>电厂1</span>
         <el-progress :percentage="70" />
       </div>
       <div class="progress-item">
-        <span>JavaScript</span>
+        <span>电厂2</span>
         <el-progress :percentage="18" />
       </div>
       <div class="progress-item">
-        <span>CSS</span>
+        <span>电厂3</span>
         <el-progress :percentage="12" />
       </div>
       <div class="progress-item">
-        <span>ESLint</span>
+        <span>电厂4</span>
         <el-progress :percentage="100" status="success" />
       </div>
     </div>
