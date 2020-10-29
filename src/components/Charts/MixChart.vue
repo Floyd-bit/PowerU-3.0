@@ -5,6 +5,8 @@
 <script>
 import echarts from 'echarts'
 import resize from './mixins/resize'
+import axios from 'axios'
+import qs from 'qs'
 
 export default {
   mixins: [resize],
@@ -42,7 +44,9 @@ export default {
     this.chart = null
   },
   methods: {
+
     initChart() {
+      let average = [0,0,0,0,0,0,0,0,0,0,0,0,0,0]
       this.chart = echarts.init(document.getElementById(this.id))
       const xData = (function() {
         const data = []
@@ -51,6 +55,31 @@ export default {
         }
         return data
       }())
+      var axios = require('axios')
+      var data = {
+        userId: 1,
+        year: 2020
+      }
+      var config = {
+        method: 'post',
+        url: 'http://localhost:7071/api/user/queryRank',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        data: data
+      }
+      console.log(config)
+      axios(config)
+        .then(res => {
+          console.log(res);
+          for(var i=0;i<12;i++){
+            average[i] = res.data.data[i].average * 30;
+          }
+          this.chart.setOption(option,true);
+          console.log(average);
+        }).catch(err => {
+          console.log(err)
+        })
       this.chart.setOption({
         backgroundColor: '#344b58',
         title: {
@@ -90,7 +119,7 @@ export default {
           textStyle: {
             color: '#90979c'
           },
-          data: ['最小值', '最大值', '累计值']
+          data: ['最小值', '最大值', '平均值']
         },
         calculable: true,
         xAxis: [{
@@ -230,7 +259,7 @@ export default {
             220
           ]
         }, {
-          name: '累计值',
+          name: '平均值',
           type: 'line',
           stack: 'total',
           symbolSize: 10,
@@ -248,23 +277,14 @@ export default {
               }
             }
           },
-          data: [
-            1036,
-            3693,
-            2962,
-            3810,
-            2519,
-            1915,
-            1748,
-            4675,
-            6209,
-            4323,
-            2865,
-            4298
-          ]
+          data: average
         }
         ]
       })
+    },
+
+    setDate() {
+
     }
   }
 }

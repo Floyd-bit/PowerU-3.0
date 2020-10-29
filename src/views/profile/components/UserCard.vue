@@ -25,7 +25,7 @@
           <span>邮箱</span>
         </div>
         <div class="user-bio-section-body">
-          <div class="text-muted">20200726@whu.edu.cn</div>
+          <div class="text-muted">202726@whu.edu.cn</div>
         </div>
       </div>
       <div class="user-skills user-bio-section">
@@ -143,7 +143,7 @@ export default {
       type: Object,
       default: () => {
         return {
-          name: "",
+          name: "123456",
           email: "",
           avatar: "",
           phonenumber: "",

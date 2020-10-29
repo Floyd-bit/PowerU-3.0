@@ -226,10 +226,12 @@
 <script>
 import { validUsername } from "@/utils/validate";
 import SocialSign from "./components/SocialSignin";
+import axios from 'axios';
+import qs from 'qs'
 
 export default {
   name: "Login",
-  components: { SocialSign },
+  components: {SocialSign},
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!validUsername(value)) {
@@ -240,14 +242,15 @@ export default {
     };
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6 || value.length > 32) {
-        callback(new Error("密码在6-32位之间"));
+        callback();
+        // callback(new Error("密码在6-32位之间"));
       } else {
         callback();
       }
     };
     const validatePhone = (rule, value, callback) => {
       //email
-      if (value.indexOf(".")>-1) {
+      if (value.indexOf(".") > -1) {
         if (
           !/^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/.test(
             value
@@ -259,7 +262,8 @@ export default {
         }
       } else {
         if (!/^1[3456789]\d{9}$/.test(value)) {
-          callback(new Error("手机号格式错误"));
+          callback();
+          //callback(new Error("手机号格式错误"));
         } else {
           callback();
         }
@@ -268,7 +272,8 @@ export default {
     //regist
     const validatePhone2 = (rule, value, callback) => {
       if (!/^1[3456789]\d{9}$/.test(value)) {
-        callback(new Error("手机号格式错误"));
+        callback();
+        //callback(new Error("手机号格式错误"));
       } else {
         callback();
       }
@@ -301,8 +306,8 @@ export default {
       },
 
       loginForm: {
-        username: "admin",
-        password: "111111",
+        username: "",
+        password: "",
         userphone: "",
         phonecode: ""
       },
@@ -315,24 +320,24 @@ export default {
       },
       loginRules: {
         username: [
-          { required: true, trigger: "blur", validator: validateUsername }
+          {required: true, trigger: "blur", validator: validateUsername}
         ],
         password: [
-          { required: true, trigger: "blur", validator: validatePassword }
+          {required: true, trigger: "blur", validator: validatePassword}
         ],
         userphone: [
-          { required: true, trigger: "blur", validator: validatePhone }
+          {required: true, trigger: "blur", validator: validatePhone}
         ]
       },
       //regist
       loginRules2: {
         password: [
-          { required: true, trigger: "blur", validator: validatePassword }
+          {required: true, trigger: "blur", validator: validatePassword}
         ],
         userphone: [
-          { required: true, trigger: "blur", validator: validatePhone2 }
+          {required: true, trigger: "blur", validator: validatePhone2}
         ],
-        usermail: [{ required: true, trigger: "blur", validator: validateMail }]
+        usermail: [{required: true, trigger: "blur", validator: validateMail}]
       },
       codeText: "发送验证码",
       count: "",
@@ -360,7 +365,7 @@ export default {
   },
   watch: {
     $route: {
-      handler: function(route) {
+      handler: function (route) {
         const query = route.query;
         if (query) {
           this.redirect = query.redirect;
@@ -385,9 +390,11 @@ export default {
     window.removeEventListener("storage", this.afterQRScan);
   },
   methods: {
+
     /*
     //点击登录调用方法
     submitForm(formName) {
+      console.log("测试");
       //保存的账号
       var name = this.loginForm.username;
       //保存的密码
@@ -440,7 +447,7 @@ export default {
       this.isShowRegist = true;
     },
     checkCapslock(e) {
-      const { key } = e;
+      const {key} = e;
       this.capsTooltip = key && key.length === 1 && key >= "A" && key <= "Z";
     },
     showPwd() {
@@ -496,8 +503,38 @@ export default {
       // }
       this.$refs.loginForm2.validate(valid => {
         if (valid) {
-          this.isShowLogin = true;
-          this.isShowRegist = false;
+          var axios = require('axios');
+          var data = {phone:this.loginForm2.userphone,email:this.loginForm2.usermail,password:this.loginForm2.password};
+
+          var config = {
+            method: 'post',
+            url: 'http://localhost:7071/api/user/register',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            data : data
+          };
+          console.log(config);
+
+          axios(config)
+            .then(response => {
+              console.log(response.data.code);
+              if(response.data.code == 0){
+
+                this.$message.success("注册成功");
+
+                this.isShowLogin = true;
+                this.isShowRegist = false;
+                return true;
+              }
+              console.log(response);
+              this.$message.error("注册失败");
+              return false;
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+
         } else {
           console.log("error submit!!");
           return false;
@@ -508,12 +545,93 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true;
+          var axios = require('axios');
+          var data = 'phone='+ this.loginForm.userphone +'&password=' + this.loginForm.password;
+
+
+          var config = {
+            method: 'post',
+            url: 'http://localhost:7071/api/user/login',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            data : data
+          };
+          console.log(config);
+          axios(config)
+            .then(response => {
+              console.log(response);
+              if(response.data.code != 0){
+                this.$message.error("登录失败");
+                this.loading = false;
+                return false;
+              }
+              this.$store
+                .dispatch("user/login", this.loginForm)
+                .then(() => {
+                  this.$router.push({
+                    path: this.redirect || "/",
+                    query: this.otherQuery
+                  });
+                  this.loading = false;
+                })
+                .catch(() => {
+                  this.$message.error("登录失败");
+                  this.loading = false;
+                });
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+
+
+          /*
+          const options = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            data: qs.stringify(data),
+            url: '/api/user/login'
+          };
+
+          axios(options)
+            .then(res => {
+              console.log(res.data);
+              if(res.data.code != 0){
+                this.loading = false;
+                return false;
+              }
+              this.$store
+                .dispatch("user/login", this.loginForm)
+                .then(() => {
+                  this.$router.push({
+                    path: this.redirect || "/",
+                    query: this.otherQuery
+
+                  });
+                  this.loading = false;
+                })
+                .catch(() => {
+                  this.$message.error("登录失败");
+                  this.loading = false;
+                });
+            })
+            */
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+
+        /*
+        if (valid) {
+          this.loading = true;
           this.$store
             .dispatch("user/login", this.loginForm)
             .then(() => {
+
               this.$router.push({
                 path: this.redirect || "/",
                 query: this.otherQuery
+
               });
               this.loading = false;
             })
@@ -524,7 +642,7 @@ export default {
         } else {
           console.log("error submit!!");
           return false;
-        }
+        }*/
       });
     },
     getOtherQuery(query) {
@@ -555,6 +673,7 @@ export default {
     // }
   }
 };
+
 </script>
 
 <style lang="scss">
